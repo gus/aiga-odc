@@ -11,7 +11,7 @@ window.onload = function() {
     this.animate( {"rotation": 7200}, 10000, ">");
   };
 
-  var bg = Raphael(document.getElementById("here"), 800, 600);
+  var bg = Raphael(document.getElementById("example"), 800, 400);
 
   bg.triangle(300, 0, 100).attr({"fill": "yellow", "stroke": 0}).mouseover(rotator);
   bg.triangle(200, 50, 100).attr({"fill": "yellow", "stroke": 0}).mouseover(rotator);
