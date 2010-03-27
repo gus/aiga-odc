@@ -44,7 +44,7 @@ task "rackme", :path, :port do |t,args|
   path = args[:path] || "example"
   port = (args[:port] || "8081").to_i
   Rack::Handler::Thin.run(Rack::Builder.app {
-    map("/") {
+    map("/aiga-odc") {
       use(ThumbleMonks::Tastic, :urls => ["/"], :root => path)
       use(Rack::Lint)
     }
