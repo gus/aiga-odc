@@ -1,0 +1,72 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+  <head>
+    <title>Raphael JS - AIGA/ODC Circles Examples</title>
+    <style type="text/css">
+      #example { border: 1px solid #aaa; }
+    </style>
+  </head>
+  
+  <body>
+    <div id="example"></div>
+    <script src="/aiga-odc/raphael/raphael.js"></script>
+    <script src="/aiga-odc/raphael/index.js"></script>
+    <script>
+      Raphael.fn.orbitalPlane = function(x, y, r) {
+        var oribtalX = x - r - 20;
+        var rxy = [r + 20, r + 20].join(",");
+        var exy = [oribtalX, y - 0.01].join(",");
+        var plane = {
+          path: ["M", oribtalX, y, "A", rxy, 0, "1,0", exy, "z"].join(" ")
+        };
+        return plane;
+      };
+
+      Raphael.fn.solarSystem = function(moonCount, x, y, r) {
+        var planet = this.circle(x, y, r).attr({"fill":"yellow", "stroke":0});
+        var orbit = this.orbitalPlane(x, y, r);
+        var plane = this.path(orbit.path).attr({"stroke":1});
+        var distanceApart = plane.getTotalLength() / moonCount;
+        var pt = plane.getPointAtLength(0);
+        var orbit = function(m, p) {
+          console.log("HERE %o", p);
+          m.animateAlong(p, 5000, false);
+          // setTimeout(function() {orbit(m);}, 5000);
+        };
+        for (var i=0; i < moonCount; i++) {
+          // var pt = plane.getPointAtLength(distanceApart * i);
+          var moon = this.circle(pt.x, pt.y, 10).attr({"fill":"yellow", "stroke":0});
+          var subpath = plane.getSubpath(0, distanceApart * i);
+          moon.animateAlong(subpath, 100, false);
+          var orbit = function() {
+            moon.animateAlong(subpath, 5000, false);
+          };
+          // setTimeout(function() { orbit(); }, 1000);
+        }
+        
+        // for (var i=0; i < moonCount; i++) {
+        //   (function orbit(m, p) {
+        //   })(moons[i], plane);
+        // }
+      };
+
+      window.onload = function() {
+        var bg = Raphael(document.getElementById("example"), 800, 400);
+        bg.solarSystem(5, 150, 90, 50);
+        // var cpath = bg.path("M 100 100 A 50,50 0 1,0 100,99.99 z").attr({"stroke":0});
+        // var sc = bg.circle(100, 90, 20).attr({"fill":"yellow", "stroke":0});
+        // sc.click(function() {
+        //   this.animateAlong("M 100 100 A 50,50 0 1,0 100,99.99 z", 5000, false, function() {
+        //     this.node.dispatchEvent(clickEvent);
+        //   });
+        // });
+        // (function orbit() {
+        //   sc.animateAlong("M 100 100 A 50,50 0 1,0 100,99.99 z", 5000, false);
+        //   tick = setTimeout(orbit, 5000);
+        // })();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+  <head>
+    <title>Raphael JS - AIGA/ODC Triangles Examples</title>
+    <style type="text/css">
+      #example { border: 1px solid #aaa; }
+    </style>
+  </head>
+  
+  <body>
+    <div id="example"></div>
+    Things to note:
+    <ul>
+      <li>Seems to work fine in Chrome, IE8, IE7</li>
+      <li>In IE7, I sometimes see a weird "leak" or trailers as the triangles stop spinning</li>
+    </ul>
+    <script src="/aiga-odc/raphael/raphael.js"></script>
+    <script src="/aiga-odc/raphael/index.js"></script>
+    <script>
+      window.onload = function() {
+        var bg = Raphael(document.getElementById("example"), 800, 400);
+
+        bg.triangle(300, 0, 100).attr({"fill": "yellow", "stroke": 0}).mouseover(Aiga.fx.rotator);
+        bg.triangle(200, 50, 100).attr({"fill": "yellow", "stroke": 0}).mouseover(Aiga.fx.rotator);
+        bg.triangle(200, 150, 50).attr({"fill": "yellow", "stroke": 0}).mouseover(Aiga.fx.rotator);
+        bg.triangle(325, 125, 50).attr({"fill": "yellow", "stroke": 0}).mouseover(Aiga.fx.rotator);
+      };
+    </script>
+  </body>
+</html>
