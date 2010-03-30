@@ -10,13 +10,30 @@
   </head>
   
   <body>
-    COMING SOON
+    <div>
+      <a href="/aiga-odc/raphael">Examples</a> |
+      <a href="/aiga-odc/raphael/triangles.html">Triangles</a> |
+      <a href="/aiga-odc/raphael/circles.html">Circles</a> |
+      <a href="/aiga-odc/raphael/squares.html">Squares</a>
+    </div>
     <div id="example"></div>
     <script src="/aiga-odc/raphael/raphael.js"></script>
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
+      Raphael.fn.pulsate = function(toPulsate, enlarge) {
+        var paper = this;
+        enlarge = enlarge == undefined ? true : enlarge;
+        toPulsate.animate({"scale": enlarge ? 2 : 0.5}, 5000);
+        setTimeout(function() { paper.pulsate(toPulsate, !enlarge); }, 5000)
+      };
+
       window.onload = function() {
         var bg = Raphael(document.getElementById("example"), 800, 400);
+        var attrs = {"stroke":0, "fill":"#aa81a3", "fill-opacity":0.75};
+        bg.pulsate(bg.rect(100, 100, 100, 100).attr(attrs));
+        bg.pulsate(bg.rect(250, 150, 75, 75).attr(attrs), false);
+        bg.pulsate(bg.rect(200, 50, 50, 50).attr(attrs), false);
+        bg.pulsate(bg.rect(200, 200, 50, 50).attr(attrs));
       };
     </script>
   </body>
