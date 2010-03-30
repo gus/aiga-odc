@@ -1,0 +1,102 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+  <head>
+    <title>Raphael JS - AIGA/ODC - Full Canvas with Content Example</title>
+    <style type="text/css">
+      body { background-color: #f5f5f5; }
+
+      /* The important hiding stuff */
+      #example {
+        position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
+      }
+      #example svg { width: 100%; height: 100%; }
+
+      /* Content blocks */
+      .content {
+        width: 20%; border-radius: 1ex; border: 1px solid #ccc; text-align: justify;
+        padding: 1ex 1em; float: left; margin: 1em 5%;
+        font-family: Georgia, serif;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div id="example"></div>
+    <div>
+      <a href="/aiga-odc/raphael">Examples</a> |
+      <a href="/aiga-odc/raphael/triangles.html">Triangles</a> |
+      <a href="/aiga-odc/raphael/circles.html">Circles</a> |
+      <a href="/aiga-odc/raphael/squares.html">Squares</a> |
+      <a href="/aiga-odc/raphael/full-canvas.html">Full canvas with content</a>
+    </div>
+
+    <div class="content">
+      <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
+        amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+        amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+        ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+        sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+        dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+      </p>
+    </div>
+
+    <div class="content">
+      <p>
+        You can see that the background color has also been changed via CSS. Lots of things we can do with
+        Raphael that I never would have guessed.
+      </p>
+      <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
+        amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+        amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+        ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+        sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+        dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+      </p>
+    </div>
+
+    <div class="content">
+      <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
+        amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+        amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+        ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+        sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+        dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+      </p>
+    </div>
+
+    <script src="/aiga-odc/raphael/raphael.js"></script>
+    <script src="/aiga-odc/raphael/index.js"></script>
+    <script>
+      window.onload = function() {
+        var bg = Raphael(document.getElementById("example"), 800, 400);
+        var attrs = {"stroke":0, "fill":"#81aaa3"};
+
+        bg.rect(100, 400, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(250, 450, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(200, 350, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(200, 500, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+
+        bg.rect(500, 100, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(650, 150, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(600, 50, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(600, 200, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+        
+        bg.rect(650, 300, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(800, 350, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(750, 250, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+        bg.rect(750, 400, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+      };
+    </script>
+  </body>
+</html>
