@@ -14,21 +14,26 @@ Raphael.fn.triangle = function(x, y, size) {
  * AIGA/ODC specific things
  */
 
-var Aiga = { fx: {}};
+var Aiga = { fx: {}, math: {}};
+
+Aiga.math.tails = function() {
+  return Math.round(Math.random()) == 0; // Why not?
+}
 
 // Make a shape rotate quickly many times and then slow down
 Aiga.fx.rotator = function(event) {
-  this.attr( {"rotation": 0});
-  this.animate( {"rotation": 7200}, 10000, ">");
+  this.attr({"rotation": 0});
+  this.animate({"rotation": 7200}, 10000, ">");
 };
 
-// Make a shape pulsate between 50% or 200% it's original size as the response to an event
+// Make a shape pulsate between 50% or 200% it's original size as the response to an event.
+// Will not pulsate again until scale is back to 1
 Aiga.fx.pulsator = function(event) {
-  var toPulsate = this;
-  clearTimeout(toPulsate.node.getAttribute("data-timeout"));
-  toPulsate.attr({"scale": 1}).animate({"scale": 2}, 500);
-  var timer = setTimeout(function() { toPulsate.animate({"scale": 1}, 500); }, 1000);
-  toPulsate.node.setAttribute("data-timeout", timer);
+  var toPulsate = this, scale = toPulsate.attr("scale");
+  if (scale.x == 1 && scale.y == 1) {
+    toPulsate.animate({"scale": (Aiga.math.tails() ? "2" : "0.5")}, 500);
+    setTimeout(function() { toPulsate.animate({"scale": 1}, 500); }, 1000);
+  }
 };
 
 // Make a shape pulsate between 50% and 200% it's original size, indefinitely

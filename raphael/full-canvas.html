@@ -5,11 +5,11 @@
   <head>
     <title>Raphael JS - AIGA/ODC - Full Canvas with Content Example</title>
     <style type="text/css">
-      body { background-color: #f5f5f5; }
+      body { background-color: #fff; }
 
       /* The important hiding stuff */
       #example {
-        position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
       }
       #example svg { width: 100%; height: 100%; }
 
@@ -47,8 +47,8 @@
 
     <div class="content">
       <p>
-        You can see that the background color has also been changed via CSS. Lots of things we can do with
-        Raphael that I never would have guessed.
+        <b>You can see that the background color has also been changed via CSS. Lots of things we can do with
+        Raphael that I never would have guessed.</b>
       </p>
       <p>
         Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
@@ -75,28 +75,41 @@
       </p>
     </div>
 
+    <script src="/aiga-odc/jquery-1.4.2.min.js"></script>
     <script src="/aiga-odc/raphael/raphael.js"></script>
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
-      window.onload = function() {
+      $(document).ready(function() {
         var bg = Raphael(document.getElementById("example"), 800, 400);
-        var attrs = {"stroke":0, "fill":"#81aaa3"};
+        var attrs = {"stroke":0, "fill":"orange"};
+        var rects = [];
 
-        bg.rect(100, 400, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(250, 450, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(200, 350, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(200, 500, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+        rects.push(bg.rect(100, 400, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(250, 450, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(200, 350, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(200, 500, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator));
 
-        bg.rect(500, 100, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(650, 150, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(600, 50, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(600, 200, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
+        rects.push(bg.rect(500, 100, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(650, 150, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(600, 50, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(600, 200, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator));
         
-        bg.rect(650, 300, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(800, 350, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(750, 250, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
-        bg.rect(750, 400, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator);
-      };
+        rects.push(bg.rect(650, 300, 100, 100).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(800, 350, 75, 75).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(750, 250, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator));
+        rects.push(bg.rect(750, 400, 50, 50).attr(attrs).mouseover(Aiga.fx.pulsator));
+
+        $("*:not(#example)").mousemove(function(ev) {
+          var len = rects.length;
+          for (var i=0; i < len; i++) {
+            var r = rects[i], bbox = r.getBBox();
+            var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
+            if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
+              Aiga.fx.pulsator.call(r, ev);
+            }
+          }
+        });
+      });
     </script>
   </body>
 </html>
