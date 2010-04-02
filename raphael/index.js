@@ -22,8 +22,12 @@ Aiga.math.tails = function() {
 
 // Make a shape rotate quickly many times and then slow down
 Aiga.fx.rotator = function(event) {
-  this.attr({"rotation": 0});
-  this.animate({"rotation": 7200}, 10000, ">");
+  var toRotate = this;
+  if (toRotate.attr("rotation") == 0) {
+    toRotate.attr({"rotation": 0});
+    toRotate.animate({"rotation": 7200}, 10000, ">");
+    setTimeout(function() { toRotate.animate({"rotation": 0}); }, 10000);
+  }
 };
 
 // Handle pulsate as the response to an event

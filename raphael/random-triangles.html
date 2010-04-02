@@ -3,7 +3,7 @@
 
 <html>
   <head>
-    <title>Raphael JS - AIGA/ODC - Full-on, random blocks example</title>
+    <title>Raphael JS - AIGA/ODC - Full-on, random triangles example</title>
     <style type="text/css">
       body { background-color: #fff; }
 
@@ -76,7 +76,7 @@
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
       function wantToAddShape() {
-        var prShape = 0.93;
+        var prShape = 0.5;
         return Math.random() > prShape;
       }
 
@@ -93,7 +93,7 @@
         var pageWidth = $(window).width(), pageHeight = $(window).height();
 
         var bg = Raphael(document.getElementById("example"), "100%", "100%");
-        var attrs = {"stroke":0, "fill":"orange"};
+        var attrs = {"stroke":0, "fill":"yellow"};
         var rects = []; // rects.push(bg.rect(x, y, w, h).attr(attrs).mouseover(Aiga.fx.pulsator));
 
         (function squareUp(homeX, homeY, width, height, depth) {
@@ -102,13 +102,14 @@
             for (var i=0; i < 4; i++) {
               var r = squares[i];
               if (wantToAddShape()) {
-                rects.push(bg.rect(r.x, r.y, r.w, r.h).attr(attrs).mouseover(Aiga.fx.pulsator));
+                // rects.push(bg.rect(r.x, r.y, r.w, r.h).attr(attrs).mouseover(Aiga.fx.pulsator));
+                rects.push(bg.triangle((r.x + r.w/2), r.y, r.h).attr(attrs).mouseover(Aiga.fx.rotator));
               } else {
                 squareUp(r.x, r.y, r.w, r.h, depth - 1);
               }
             }
           }
-        })(0, 0, pageWidth, pageHeight, 5);
+        })(0, 0, pageWidth, pageHeight, 4);
 
         // Deal with mouseovers; pass them along to the stuff below
         $("*:not(#example)").mousemove(function(ev) {
@@ -117,7 +118,7 @@
             var r = rects[i], bbox = r.getBBox();
             var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
             if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
-              Aiga.fx.pulsator.call(r, ev);
+              Aiga.fx.rotator.call(r, ev);
             }
           }
         });
