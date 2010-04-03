@@ -4,22 +4,8 @@
 <html>
   <head>
     <title>Raphael JS - AIGA/ODC - Full-on, random triangles example</title>
-    <style type="text/css">
-      body { background-color: #fff; }
-
-      /* The important hiding stuff */
-      #example {
-        position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
-      }
-      #example svg { width: 100%; height: 100%; }
-
-      /* Content blocks */
-      .content {
-        width: 20%; border-radius: 1ex; border: 1px solid #ccc; text-align: justify;
-        padding: 1ex 1em; float: left; margin: 1em 5%;
-        font-family: Georgia, serif;
-      }
-    </style>
+    <link rel="stylesheet" type="text/css" media="screen" href="/aiga-odc/lib/aiga-shapes.css" />
+    <style type="text/css">body { background-color: #fff; }</style>
   </head>
   
   <body>
@@ -75,58 +61,7 @@
     </div>
 
     <script src="/aiga-odc/jquery-1.4.2.min.js"></script>
-    <script src="/aiga-odc/raphael/raphael.js"></script>
-    <script src="/aiga-odc/raphael/index.js"></script>
-    <script>
-      $(document).ready(function() {
-        // Configure platforms
-        var pageWidth = $(window).width(), pageHeight = $(window).height();
-        var raphael = Raphael(document.getElementById("example"), "100%", "100%");
-
-        var squareApp = new Aiga.FunWithShapes(raphael, {
-          width: pageWidth, height: pageHeight, depth: 4, density: 0.07,
-          createShape: function(raphael, grid) {
-            var attrs = {"stroke":0, "fill":"#8DC63F"};
-            return raphael.rect(grid.x, grid.y, grid.w, grid.h).attr(attrs).mouseover(Aiga.fx.pulsator)
-          },
-          boundingBox: function(shape) { return shape.getBBox(); },
-          mouseover: function(shape, ev) { Aiga.fx.pulsator.call(shape, ev); }
-        });
-
-        var triangleApp = new Aiga.FunWithShapes(raphael, {
-          width: pageWidth, height: pageHeight, depth: 4, density: 0.5,
-          createShape: function(raphael, grid) {
-            var attrs = {"stroke":0, "fill":"#44C8F5"};
-            return raphael.triangle((grid.x + grid.w/2), grid.y, grid.h).
-              attr(attrs).mouseover(Aiga.fx.rotator);
-          },
-          boundingBox: function(shape) { return shape.getBBox(); },
-          mouseover: function(shape, ev) { Aiga.fx.rotator.call(shape, ev); }
-        });
-
-        var circleApp = new Aiga.FunWithShapes(raphael, {
-          width: pageWidth, height: pageHeight, depth: 3, density: 0.5,
-          createShape: function(raphael, grid) {
-            var moonCount = Math.ceil(Math.random() * 10);
-            var cx = (grid.x + grid.w/2), cy = (grid.y + grid.h/2), radius = grid.w/4;
-            var system = new Aiga.PlanetarySystem(raphael, moonCount, cx, cy, radius);
-            system.draw();
-            return system;
-          },
-          boundingBox: function(shape) { return shape.planet.getBBox(); },
-          mouseover: function(shape, ev) { shape.orbit(); }
-        });
-
-        // Making it all go
-        var currentApp = triangleApp;
-        $("a[href=#square]").click(function() { (currentApp = squareApp).draw(); });
-        $("a[href=#triangle]").click(function() { (currentApp = triangleApp).draw(); });
-        $("a[href=#circle]").click(function() { (currentApp = circleApp).draw(); });
-        currentApp.draw();
-
-        // Deal with mouseovers for movements not over the canvas; pass them along to the stuff below
-        $("*:not(#example)").mousemove(function(ev) { currentApp.checkMouseover(ev); });
-      });
-    </script>
+    <script src="/aiga-odc/lib/raphael-mod.min.js"></script>
+    <script src="/aiga-odc/lib/aiga-shapes.js"></script>
   </body>
 </html>
