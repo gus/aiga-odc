@@ -48,7 +48,7 @@
         var moons = [];
         for (var i=0; i < moonCount; i++) {
           moons.push(function() {
-            var planetRadius = r * (Math.random() % .25);
+            var planetRadius = r * (Math.random() % 0.20) + 0.10;
             var moon = new Aiga.Moon(planet, planetRadius, radiansApart * i);
             moon.draw(that);
             return moon;
@@ -57,7 +57,7 @@
 
         planet.mouseover(function(event) {
           if (this.attr("rotation") == 0) {
-            this.animate({"rotation":720}, 2000, function() { this.attr({"rotation": 0}); }).
+            this.animate({"rotation":1080}, 2500, function() { this.attr({"rotation": 0}); }).
               onAnimation(function() {
                 for (var i=0; i < moonCount; i++) { moons[i].updateOrbit(planet.attr("rotation")); }
               });
@@ -69,6 +69,7 @@
         var bg = Raphael(document.getElementById("example"), 800, 400);
         bg.solarSystem(10, 150, 90, 50);
         bg.solarSystem(10, 300, 250, 100);
+        bg.solarSystem(5, 450, 100, 25);
       };
     </script>
   </body>
