@@ -150,8 +150,8 @@ Aiga.FunWithShapes = function(raphael, options) {
 
 };
 Aiga.FunWithShapes.prototype.draw = function() {
-  this.bg.clear();
   this.shapes.length = 0;
+  this.bg.clear();
   this.gridify(0, 0, this.options.width, this.options.height, this.options.depth);
 };
 Aiga.FunWithShapes.prototype.checkMouseover = function(ev) {
