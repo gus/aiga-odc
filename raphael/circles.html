@@ -17,76 +17,58 @@
     <script src="/aiga-odc/raphael/raphael.js"></script>
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
-      Raphael.fn.orbitalPlane = function(x, y, r) {
-        var oribtalX = x - r - 20;
-        var rxy = [r + 20, r + 20].join(",");
-        var exy = [oribtalX, y - 0.00001].join(",");
-        var plane = {
-          path: ["M", oribtalX, y, "A", rxy, 0, "1,0", exy, "z"].join(" ")
+      Aiga.Moon = function(planet, radius, startingRadian) {
+        this.cx = planet.attr("cx");
+        this.cy = planet.attr("cy");
+        this.moonRadius = radius;
+        this.orbitRadius = planet.attr("r") + (radius * 2);
+        this.radian = startingRadian;
+        this.moon = null;
+      };
+      Aiga.Moon.prototype.calculateCircularPoint = function(radian) {
+        radian = radian % 360;
+        return {
+          x: this.cx + (this.orbitRadius * Math.cos(radian * Math.PI / 180.0)),
+          y: this.cy + (this.orbitRadius * Math.sin(radian * Math.PI / 180.0))
         };
-        return plane;
+      };
+      Aiga.Moon.prototype.draw = function(bg) {
+        var centerPoint = this.calculateCircularPoint(this.radian);
+        this.moon = bg.circle(centerPoint.x, centerPoint.y, this.moonRadius).attr({"fill":"yellow", "stroke":0});
+      };
+      Aiga.Moon.prototype.updateOrbit = function(newRadians) {
+        var centerPoint = this.calculateCircularPoint(this.radian + newRadians);
+        this.moon.attr({"cx": centerPoint.x, "cy": centerPoint.y});
       };
 
       Raphael.fn.solarSystem = function(moonCount, x, y, r) {
-        // var system = this.set();
         var planet = this.circle(x, y, r).attr({"fill":"yellow", "stroke":0});
-        var orbitPlane = this.orbitalPlane(x, y, r);
-        var plane = this.path(orbitPlane.path).attr({"stroke":1});
-        var distanceApart = plane.getTotalLength() / moonCount;
         var radiansApart = 360 / moonCount;
-        var pt = plane.getPointAtLength(0);
-        // var pt = plane.getPointAtLength(0);
-        // var orbit = function(m, p) {
-        //   console.log("HERE %o", p);
-        //   m.animateAlong(p, 5000, false);
-        //   // setTimeout(function() {orbit(m);}, 5000);
-        // };
         var that = this;
         var moons = [];
         for (var i=0; i < moonCount; i++) {
-          (function() {
-            // var orbit = that.orbitalPlane(x, y, r);
-            // var plane = that.path(orbit.path).attr({"stroke":1});
-            // var distanceApart = plane.getTotalLength() / moonCount;
-            // console.log("Radians: " + (radiansApart * i));
-            // var pt = plane.getPointAtLength(distanceApart * i);
-            var moon = that.circle(pt.x, pt.y, 10).attr({"fill":"yellow", "stroke":0});
-            moons.push(moon);
-            // var orbit = function(m, p) {
-            //   m.animateAlong(p, 5000, false);
-            // }
-            // setTimeout( function() {
-            //   // var pt2 = plane.getPointAtLength(distanceApart * i);
-            //   // var nextpath = plane.getSubpath(pt2, plane.getTotalLength());
-            //   orbit(moon, plane);
-            // }, (5000/moonCount * i));
-          })();
+          moons.push(function() {
+            var planetRadius = r * (Math.random() % .25);
+            var moon = new Aiga.Moon(planet, planetRadius, radiansApart * i);
+            moon.draw(that);
+            return moon;
+          }());
         }
+
         planet.mouseover(function(event) {
-          var speed = 1000;
-          var animateDelay = speed / moonCount;
-          var orbit = function(moon, plane, rotations, count) {
-            count = count || 0;
-            moon.animateAlong(plane, speed, false);
-            if (count < 5) {
-              setTimeout(function() { orbit(moon, plane, rotations, count + 1); }, speed);
-            } else {
-              // moon.hide();
-            }
-          }
-          for (var i=0; i < moonCount; i++) {
-            (function() {
-              var moon = moons[i];
-              // moon.show();
-              setTimeout( function() { orbit(moon, plane, 5); }, animateDelay * i);
-            })();
+          if (this.attr("rotation") == 0) {
+            this.animate({"rotation":720}, 2000, function() { this.attr({"rotation": 0}); }).
+              onAnimation(function() {
+                for (var i=0; i < moonCount; i++) { moons[i].updateOrbit(planet.attr("rotation")); }
+              });
           }
         });
       };
 
       window.onload = function() {
         var bg = Raphael(document.getElementById("example"), 800, 400);
-        bg.solarSystem(5, 150, 90, 50);
+        bg.solarSystem(10, 150, 90, 50);
+        bg.solarSystem(10, 300, 250, 100);
       };
     </script>
   </body>
