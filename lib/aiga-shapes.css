@@ -1,11 +1,4 @@
-#example {
+#shapescanvas {
   position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
 }
-#example svg { width: 100%; height: 100%; }
-
-/* Content blocks */
-.content {
-  width: 20%; border-radius: 1ex; border: 1px solid #ccc; text-align: justify;
-  padding: 1ex 1em; float: left; margin: 1em 5%;
-  font-family: Georgia, serif;
-}
+#shapescanvas svg { width: 100%; height: 100%; }
