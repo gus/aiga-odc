@@ -17,59 +17,11 @@
     <script src="/aiga-odc/raphael/raphael.js"></script>
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
-      Aiga.Moon = function(planet, radius, startingRadian) {
-        this.cx = planet.attr("cx");
-        this.cy = planet.attr("cy");
-        this.moonRadius = radius;
-        this.orbitRadius = planet.attr("r") + (radius * 2);
-        this.radian = startingRadian;
-        this.moon = null;
-      };
-      Aiga.Moon.prototype.calculateCircularPoint = function(radian) {
-        radian = radian % 360;
-        return {
-          x: this.cx + (this.orbitRadius * Math.cos(radian * Math.PI / 180.0)),
-          y: this.cy + (this.orbitRadius * Math.sin(radian * Math.PI / 180.0))
-        };
-      };
-      Aiga.Moon.prototype.draw = function(bg) {
-        var centerPoint = this.calculateCircularPoint(this.radian);
-        this.moon = bg.circle(centerPoint.x, centerPoint.y, this.moonRadius).attr({"fill":"yellow", "stroke":0});
-      };
-      Aiga.Moon.prototype.updateOrbit = function(newRadians) {
-        var centerPoint = this.calculateCircularPoint(this.radian + newRadians);
-        this.moon.attr({"cx": centerPoint.x, "cy": centerPoint.y});
-      };
-
-      Raphael.fn.solarSystem = function(moonCount, x, y, r) {
-        var planet = this.circle(x, y, r).attr({"fill":"yellow", "stroke":0});
-        var radiansApart = 360 / moonCount;
-        var that = this;
-        var moons = [];
-        for (var i=0; i < moonCount; i++) {
-          moons.push(function() {
-            var planetRadius = r * (Math.random() % 0.20) + 0.10;
-            var moon = new Aiga.Moon(planet, planetRadius, radiansApart * i);
-            moon.draw(that);
-            return moon;
-          }());
-        }
-
-        planet.mouseover(function(event) {
-          if (this.attr("rotation") == 0) {
-            this.animate({"rotation":1080}, 2500, function() { this.attr({"rotation": 0}); }).
-              onAnimation(function() {
-                for (var i=0; i < moonCount; i++) { moons[i].updateOrbit(planet.attr("rotation")); }
-              });
-          }
-        });
-      };
-
       window.onload = function() {
         var bg = Raphael(document.getElementById("example"), 800, 400);
-        bg.solarSystem(10, 150, 90, 50);
-        bg.solarSystem(10, 300, 250, 100);
-        bg.solarSystem(5, 450, 100, 25);
+        (new Aiga.PlanetarySystem(bg, 10, 150, 90, 50)).draw();
+        (new Aiga.PlanetarySystem(bg, 10, 300, 250, 100)).draw();
+        (new Aiga.PlanetarySystem(bg, 5, 450, 100, 25)).draw();
       };
     </script>
   </body>

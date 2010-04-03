@@ -3,7 +3,7 @@
 
 <html>
   <head>
-    <title>Raphael JS - AIGA/ODC - Full-on, random blocks example</title>
+    <title>Raphael JS - AIGA/ODC - Full-on, random triangles example</title>
     <style type="text/css">
       body { background-color: #fff; }
 
@@ -76,7 +76,7 @@
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
       function wantToAddShape() {
-        var prShape = 0.93;
+        var prShape = 0.5;
         return Math.random() > prShape;
       }
 
@@ -93,31 +93,36 @@
         var pageWidth = $(window).width(), pageHeight = $(window).height();
 
         var bg = Raphael(document.getElementById("example"), "100%", "100%");
-        var attrs = {"stroke":0, "fill":"#8DC63F"};
+        var attrs = {"stroke":0, "fill":"yellow"};
         var rects = []; // rects.push(bg.rect(x, y, w, h).attr(attrs).mouseover(Aiga.fx.pulsator));
 
         (function squareUp(homeX, homeY, width, height, depth) {
           if (depth > 0) {
             var squares = fourSquare(homeX, homeY, width, height);
             for (var i=0; i < 4; i++) {
-              var r = squares[i];
-              if (wantToAddShape()) {
-                rects.push(bg.rect(r.x, r.y, r.w, r.h).attr(attrs).mouseover(Aiga.fx.pulsator));
-              } else {
-                squareUp(r.x, r.y, r.w, r.h, depth - 1);
-              }
+              (function() {
+                var r = squares[i];
+                if (wantToAddShape()) {
+                  var moonCount = Math.ceil(Math.random() * 10);
+                  var planet = new Aiga.PlanetarySystem(bg, moonCount, (r.x + r.w/2), (r.y + r.h/2), r.w/4);
+                  planet.draw();
+                  rects.push(planet);
+                } else {
+                  squareUp(r.x, r.y, r.w, r.h, depth - 1);
+                }
+              })();
             }
           }
-        })(0, 0, pageWidth, pageHeight, 5);
+        })(0, 0, pageWidth, pageHeight, 3);
 
         // Deal with mouseovers; pass them along to the stuff below
         $("*:not(#example)").mousemove(function(ev) {
           var len = rects.length;
           for (var i=0; i < len; i++) {
-            var r = rects[i], bbox = r.getBBox();
+            var system = rects[i], r = system.planet, bbox = r.getBBox();
             var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
             if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
-              Aiga.fx.pulsator.call(r, ev);
+              system.orbit();
             }
           }
         });
