@@ -1,0 +1,121 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+  <head>
+    <title>Raphael JS - AIGA/ODC - Full-on, random triangles example</title>
+    <style type="text/css">
+      body { background-color: #fff; }
+
+      /* The important hiding stuff */
+      #example {
+        position: fixed; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: -1;
+      }
+      #example svg { width: 100%; height: 100%; }
+
+      /* Content blocks */
+      .content {
+        width: 20%; border-radius: 1ex; border: 1px solid #ccc; text-align: justify;
+        padding: 1ex 1em; float: left; margin: 1em 5%;
+        font-family: Georgia, serif;
+      }
+    </style>
+  </head>
+  
+  <body>
+    <div id="example"></div>
+    <div id="cornershapes">
+      <a href="/aiga-odc/raphael">Examples</a> |
+      <a href="#square" class="squarebg">&prod;</a> |
+      <a href="#triangle" class="trianglebg">&Delta;</a> |
+      <a href="#circle" class="circlebg">&oplus;</a>
+    </div>
+
+    <div class="content">
+      <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
+        amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+        amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+        ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+        sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+        dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+      </p>
+    </div>
+
+    <div class="content">
+      <p>
+        <b>You can see that the background color has also been changed via CSS. Lots of things we can do with
+        Raphael that I never would have guessed.</b>
+      </p>
+      <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
+        amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+        amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+        ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+        sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+        dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+      </p>
+    </div>
+
+    <div class="content">
+      <p>
+        Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.
+        Vestibulum tortor quam, feugiat vitae, ultricies eget, tempor sit amet, ante. Donec eu libero sit
+        amet quam egestas semper. Aenean ultricies mi vitae est. Mauris placerat eleifend leo. Quisque sit
+        amet est et sapien ullamcorper pharetra. Vestibulum erat wisi, condimentum sed, commodo vitae,
+        ornare sit amet, wisi. Aenean fermentum, elit eget tincidunt condimentum, eros ipsum rutrum orci,
+        sagittis tempus lacus enim ac dui. Donec non enim in turpis pulvinar facilisis. Ut felis. Praesent
+        dapibus, neque id cursus faucibus, tortor neque egestas augue, eu vulputate magna eros eu erat.
+        Aliquam erat volutpat. Nam dui mi, tincidunt quis, accumsan porttitor, facilisis luctus, metus
+      </p>
+    </div>
+
+    <script src="/aiga-odc/jquery-1.4.2.min.js"></script>
+    <script src="/aiga-odc/raphael/raphael.js"></script>
+    <script src="/aiga-odc/raphael/index.js"></script>
+    <script>
+      $(document).ready(function() {
+        var pageWidth = $(window).width(), pageHeight = $(window).height();
+        var bg = Raphael(document.getElementById("example"), "100%", "100%");
+
+        var squareApp = new Aiga.FunWithShapes(bg, {
+          width: pageWidth, height: pageHeight, depth: 5, density: 0.07,
+          createShape: function(raphael, grid) {
+            var attrs = {"stroke":0, "fill":"#8DC63F"};
+            return raphael.rect(grid.x, grid.y, grid.w, grid.h).attr(attrs).mouseover(Aiga.fx.pulsator)
+          }
+        });
+
+        var triangleApp = new Aiga.FunWithShapes(bg, {
+          width: pageWidth, height: pageHeight, depth: 4, density: 0.5,
+          createShape: function(raphael, grid) {
+            var attrs = {"stroke":0, "fill":"#44C8F5"};
+            return raphael.triangle((grid.x + grid.w/2), grid.y, grid.h).
+              attr(attrs).mouseover(Aiga.fx.rotator);
+          }
+        });
+
+        var circleApp = new Aiga.FunWithShapes(bg, {
+          width: pageWidth, height: pageHeight, depth: 3, density: 0.5,
+          createShape: function(raphael, grid) {
+            var moonCount = Math.ceil(Math.random() * 10);
+            var cx = (grid.x + grid.w/2), cy = (grid.y + grid.h/2), radius = grid.w/4;
+            var system = new Aiga.PlanetarySystem(raphael, moonCount, cx, cy, radius);
+            system.draw();
+            return system;
+          }
+        });
+
+        $("a[href=#square]").click(function() { squareApp.draw(); });
+
+        $("a[href=#triangle]").click(function() { triangleApp.draw(); });
+
+        $("a[href=#circle]").click(function() { circleApp.draw(); });
+      });
+    </script>
+  </body>
+</html>

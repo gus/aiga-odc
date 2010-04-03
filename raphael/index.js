@@ -18,7 +18,14 @@ var Aiga = { fx: {}, math: {}};
 
 Aiga.math.tails = function() {
   return Math.round(Math.random()) == 0; // Why not?
-}
+};
+Aiga.math.findPointOnCircumference = function(cx, cy, radius, radian) {
+  var angle = radian * Math.PI / 180.0;
+  return {
+    x: cx + (radius * Math.cos(angle)),
+    y: cy + (radius * Math.sin(angle))
+  };
+};
 
 // Make a shape rotate quickly many times and then slow down
 Aiga.fx.rotator = function(event) {
@@ -53,10 +60,12 @@ Aiga.PlanetarySystem = function(bg, moonCount, x, y, r) {
   var radiansApart = 360 / moonCount;
   this.moons = [];
   var system = this;
+  
+  var randomPlanetSize = function() { return r * (Math.random() % 0.20) + 0.10; }
+  
   for (var i=0; i < moonCount; i++) {
     this.moons.push(function() {
-      var planetRadius = r * (Math.random() % 0.20) + 0.10;
-      var moon = new Aiga.Moon(system.planet, planetRadius, radiansApart * i);
+      var moon = new Aiga.Moon(system.planet, randomPlanetSize(), radiansApart * i);
       moon.draw(bg);
       return moon;
     }());
@@ -79,7 +88,7 @@ Aiga.PlanetarySystem.prototype.draw = function() {
   system.planet.mouseover(function(event) { system.orbit.call(system); });
 };
 
-// Make a moon
+// Make a moon. TODO: Clean up the code here. Find a better way to pass around bg or return a raphael moon.
 
 Aiga.Moon = function(planet, radius, startingRadian) {
   this.cx = planet.attr("cx");
@@ -89,18 +98,59 @@ Aiga.Moon = function(planet, radius, startingRadian) {
   this.radian = startingRadian;
   this.moon = null;
 };
-Aiga.Moon.prototype.calculateCircularPoint = function(radian) {
-  var modRadian = radian % 360;
-  return {
-    x: this.cx + (this.orbitRadius * Math.cos(modRadian * Math.PI / 180.0)),
-    y: this.cy + (this.orbitRadius * Math.sin(modRadian * Math.PI / 180.0))
-  };
+Aiga.Moon.prototype.calculatePoint = function(radian) {
+  return Aiga.math.findPointOnCircumference(this.cx, this.cy, this.orbitRadius, (radian % 360));
 };
 Aiga.Moon.prototype.draw = function(bg) {
-  var centerPoint = this.calculateCircularPoint(this.radian);
+  var centerPoint = this.calculatePoint(this.radian);
   this.moon = bg.circle(centerPoint.x, centerPoint.y, this.radius).attr({"fill":"yellow", "stroke":0});
 };
 Aiga.Moon.prototype.updateOrbit = function(radianDelta) {
-  var centerPoint = this.calculateCircularPoint(this.radian + radianDelta);
+  var centerPoint = this.calculatePoint(this.radian + radianDelta);
   this.moon.attr({"cx": centerPoint.x, "cy": centerPoint.y});
 };
+
+/*
+ * The main platform. Handles creating a grid, drawing stuff, and capturing all events
+ */
+
+Aiga.FunWithShapes = function(raphael, options) {
+  var scope = this;
+  scope.bg = raphael;
+  scope.shapes = [];
+  scope.options = options;
+
+  scope.shouldAddShape = function() {
+    return Math.random() < scope.options.density;
+  };
+
+  scope.makeGrid = function(x, y, w, h) {
+    var grids = [];
+    function makeDimension(x,y,w,h) { return {"x":x, "y":y, "w":w, "h":h}; }
+    grids.push(makeDimension(x, y, w/2, h/2));
+    grids.push(makeDimension(x + w/2, y, w/2, h/2));
+    grids.push(makeDimension(x, y + h/2, w/2, h/2));
+    grids.push(makeDimension(x + w/2, y + h/2, w/2, h/2));
+    return grids;
+  };
+
+  scope.gridify = function(x, y, w, h, depth) {
+    if (depth > 0) {
+      var squares = scope.makeGrid(x, y, w, h);
+      for (var i=0; i < 4; i++) {
+        var grid = squares[i];
+        if (scope.shouldAddShape()) {
+          scope.shapes.push(scope.options.createShape(scope.bg, grid));
+        } else {
+          scope.gridify(grid.x, grid.y, grid.w, grid.h, depth - 1);
+        }
+      }
+    }
+  };
+
+}
+Aiga.FunWithShapes.prototype.draw = function() {
+  this.bg.clear();
+  this.shapes.length = 0;
+  this.gridify(0, 0, this.options.width, this.options.height, this.options.depth);
+}
