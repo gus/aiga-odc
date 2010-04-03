@@ -148,9 +148,22 @@ Aiga.FunWithShapes = function(raphael, options) {
     }
   };
 
-}
+};
 Aiga.FunWithShapes.prototype.draw = function() {
   this.bg.clear();
   this.shapes.length = 0;
   this.gridify(0, 0, this.options.width, this.options.height, this.options.depth);
-}
+};
+Aiga.FunWithShapes.prototype.checkMouseover = function(ev) {
+  var shapeCount = this.shapes.length;
+  var scope = this;
+  for (var i=0; i < shapeCount; i++) {
+    (function() {
+      var shape = scope.shapes[i], bbox = scope.options.boundingBox(shape);
+      var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
+      if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
+        scope.options.mouseover(shape, ev);
+      }
+    })();
+  }
+};

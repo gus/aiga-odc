@@ -79,27 +79,32 @@
     <script src="/aiga-odc/raphael/index.js"></script>
     <script>
       $(document).ready(function() {
+        // Configure platforms
         var pageWidth = $(window).width(), pageHeight = $(window).height();
-        var bg = Raphael(document.getElementById("example"), "100%", "100%");
+        var raphael = Raphael(document.getElementById("example"), "100%", "100%");
 
-        var squareApp = new Aiga.FunWithShapes(bg, {
-          width: pageWidth, height: pageHeight, depth: 5, density: 0.07,
+        var squareApp = new Aiga.FunWithShapes(raphael, {
+          width: pageWidth, height: pageHeight, depth: 4, density: 0.07,
           createShape: function(raphael, grid) {
             var attrs = {"stroke":0, "fill":"#8DC63F"};
             return raphael.rect(grid.x, grid.y, grid.w, grid.h).attr(attrs).mouseover(Aiga.fx.pulsator)
-          }
+          },
+          boundingBox: function(shape) { return shape.getBBox(); },
+          mouseover: function(shape, ev) { Aiga.fx.pulsator.call(shape, ev); }
         });
 
-        var triangleApp = new Aiga.FunWithShapes(bg, {
+        var triangleApp = new Aiga.FunWithShapes(raphael, {
           width: pageWidth, height: pageHeight, depth: 4, density: 0.5,
           createShape: function(raphael, grid) {
             var attrs = {"stroke":0, "fill":"#44C8F5"};
             return raphael.triangle((grid.x + grid.w/2), grid.y, grid.h).
               attr(attrs).mouseover(Aiga.fx.rotator);
-          }
+          },
+          boundingBox: function(shape) { return shape.getBBox(); },
+          mouseover: function(shape, ev) { Aiga.fx.rotator.call(shape, ev); }
         });
 
-        var circleApp = new Aiga.FunWithShapes(bg, {
+        var circleApp = new Aiga.FunWithShapes(raphael, {
           width: pageWidth, height: pageHeight, depth: 3, density: 0.5,
           createShape: function(raphael, grid) {
             var moonCount = Math.ceil(Math.random() * 10);
@@ -107,14 +112,20 @@
             var system = new Aiga.PlanetarySystem(raphael, moonCount, cx, cy, radius);
             system.draw();
             return system;
-          }
+          },
+          boundingBox: function(shape) { return shape.planet.getBBox(); },
+          mouseover: function(shape, ev) { shape.orbit(); }
         });
 
-        $("a[href=#square]").click(function() { squareApp.draw(); });
+        // Making it all go
+        var currentApp = triangleApp;
+        $("a[href=#square]").click(function() { (currentApp = squareApp).draw(); });
+        $("a[href=#triangle]").click(function() { (currentApp = triangleApp).draw(); });
+        $("a[href=#circle]").click(function() { (currentApp = circleApp).draw(); });
+        currentApp.draw();
 
-        $("a[href=#triangle]").click(function() { triangleApp.draw(); });
-
-        $("a[href=#circle]").click(function() { circleApp.draw(); });
+        // Deal with mouseovers for movements not over the canvas; pass them along to the stuff below
+        $("*:not(#example)").mousemove(function(ev) { currentApp.checkMouseover(ev); });
       });
     </script>
   </body>
