@@ -116,16 +116,16 @@
         })(0, 0, pageWidth, pageHeight, 3);
 
         // Deal with mouseovers; pass them along to the stuff below
-        $("*:not(#example)").mousemove(function(ev) {
-          var len = rects.length;
-          for (var i=0; i < len; i++) {
-            var system = rects[i], r = system.planet, bbox = r.getBBox();
-            var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
-            if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
-              system.orbit();
-            }
-          }
-        });
+        // $("*:not(#example)").mousemove(function(ev) {
+        //   var len = rects.length;
+        //   for (var i=0; i < len; i++) {
+        //     var system = rects[i], r = system.planet, bbox = r.getBBox();
+        //     var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
+        //     if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
+        //       system.orbit();
+        //     }
+        //   }
+        // });
       });
     </script>
   </body>

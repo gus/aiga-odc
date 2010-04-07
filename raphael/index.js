@@ -74,9 +74,12 @@ Aiga.PlanetarySystem = function(bg, moonCount, x, y, r) {
 Aiga.PlanetarySystem.prototype.orbit = function() {
   var system = this;
   var moonCount = system.moons.length;
-  var resetRotation = function() { system.planet.attr({"rotation": 0}); };
+  var resetRotation = function() {
+    system.planet.attr({"rotation": 0});
+    system.orbit.call(system); // Don't do this if you want mouseover
+  };
   if (system.planet.attr("rotation") == 0) {
-    system.planet.animate({"rotation":1440}, 5000, ">", resetRotation).onAnimation(function() {
+    system.planet.animate({"rotation":360}, 30000, resetRotation).onAnimation(function() {
       for (var i=0; i < moonCount; i++) {
         system.moons[i].updateOrbit(system.planet.attr("rotation"));
       }
@@ -85,7 +88,8 @@ Aiga.PlanetarySystem.prototype.orbit = function() {
 };
 Aiga.PlanetarySystem.prototype.draw = function() {
   var system = this;
-  system.planet.mouseover(function(event) { system.orbit.call(system); });
+  // system.planet.mouseover(function(event) { system.orbit.call(system); });
+  system.orbit.call(system);
 };
 
 // Make a moon. TODO: Clean up the code here. Find a better way to pass around bg or return a raphael moon.
