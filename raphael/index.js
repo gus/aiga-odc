@@ -32,8 +32,8 @@ Aiga.fx.rotator = function(event) {
   var toRotate = this;
   if (toRotate.attr("rotation") == 0) {
     toRotate.attr({"rotation": 0});
-    toRotate.animate({"rotation": 7200}, 10000, ">");
-    setTimeout(function() { toRotate.animate({"rotation": 0}); }, 10000);
+    // toRotate.animate({"rotation": 7200}, 10000, ">", function() { toRotate.animate({"rotation": 0}); });
+    toRotate.animate({"rotation": 1440}, 6000, ">", function() { toRotate.animate({"rotation": 0}); });
   }
 };
 

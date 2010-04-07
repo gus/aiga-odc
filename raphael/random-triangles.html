@@ -102,26 +102,34 @@
             for (var i=0; i < 4; i++) {
               var r = squares[i];
               if (wantToAddShape()) {
-                // rects.push(bg.rect(r.x, r.y, r.w, r.h).attr(attrs).mouseover(Aiga.fx.pulsator));
-                rects.push(bg.triangle((r.x + r.w/2), r.y, r.h).attr(attrs).mouseover(Aiga.fx.rotator));
+                // rects.push(bg.triangle((r.x + r.w/2), r.y, r.h).attr(attrs).mouseover(Aiga.fx.rotator));
+                rects.push(bg.triangle((r.x + r.w/2), r.y, r.h).attr(attrs));
               } else {
                 squareUp(r.x, r.y, r.w, r.h, depth - 1);
               }
             }
           }
         })(0, 0, pageWidth, pageHeight, 4);
+        
+        (function randomSpinning(triangles) {
+          var count = triangles.length;
+          for (var i=0; i < count; i++) {
+            if (Math.random() < 0.10) { Aiga.fx.rotator.call(triangles[i]); }
+          }
+          setTimeout(function() { randomSpinning(triangles); }, 5000);
+        })(rects);
 
         // Deal with mouseovers; pass them along to the stuff below
-        $("*:not(#example)").mousemove(function(ev) {
-          var len = rects.length;
-          for (var i=0; i < len; i++) {
-            var r = rects[i], bbox = r.getBBox();
-            var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
-            if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
-              Aiga.fx.rotator.call(r, ev);
-            }
-          }
-        });
+        // $("*:not(#example)").mousemove(function(ev) {
+        //   var len = rects.length;
+        //   for (var i=0; i < len; i++) {
+        //     var r = rects[i], bbox = r.getBBox();
+        //     var dx = ev.clientX - bbox.x, dy = ev.clientY - bbox.y;
+        //     if ((dx >= 0 && dx <= bbox.width) && (dy >= 0 && dy <= bbox.height)) {
+        //       Aiga.fx.rotator.call(r, ev);
+        //     }
+        //   }
+        // });
       });
     </script>
   </body>
