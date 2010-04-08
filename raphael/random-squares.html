@@ -102,13 +102,14 @@
             for (var i=0; i < 4; i++) {
               var r = squares[i];
               if (wantToAddShape()) {
-                rects.push(bg.rect(r.x, r.y, r.w, r.h).attr(attrs).mouseover(Aiga.fx.pulsator));
+                var side = r.w < r.h ? r.w : r.h;
+                rects.push(bg.rect(r.x, r.y, side, side).attr(attrs).mouseover(Aiga.fx.pulsator));
               } else {
                 squareUp(r.x, r.y, r.w, r.h, depth - 1);
               }
             }
           }
-        })(0, 0, pageWidth, pageHeight, 5);
+        })(0, 0, pageWidth, pageHeight, 4);
 
         // Deal with mouseovers; pass them along to the stuff below
         $("*:not(#example)").mousemove(function(ev) {
