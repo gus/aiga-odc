@@ -19,11 +19,13 @@
   
   <body>
     <div id="shapescanvas"></div>
-    <div id="cornershapes">
+    <div>
       <a href="/aiga-odc/raphael">Examples</a> |
-      <a href="#square" class="squarebg">&prod;</a> |
-      <a href="#triangle" class="trianglebg">&Delta;</a> |
-      <a href="#circle" class="circlebg">&oplus;</a>
+      <span id="cornershapes">
+        <a href="#square" class="squarebg">&prod;</a> |
+        <a href="#triangle" class="trianglebg">&Delta;</a> |
+        <a href="#circle" class="circlebg">&oplus;</a>
+      </span>
     </div>
 
     <div class="content">
@@ -70,6 +72,7 @@
     </div>
 
     <script src="/aiga-odc/jquery-1.4.2.min.js"></script>
+    <script src="/aiga-odc/lib/jquery.cookie.min.js"></script>
     <script src="/aiga-odc/lib/raphael-mod.min.js"></script>
     <script src="/aiga-odc/lib/aiga-shapes.js"></script>
     <script src="/aiga-odc/lib/aiga-shape-template.js"></script>
